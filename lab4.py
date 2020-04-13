@@ -58,96 +58,98 @@ table1.add_column("X13", X13)
 table1.add_column("X23", X23)
 table1.add_column("X123", X123)
 print(table1, "\n")
-for i in range(1, m + 1):
-    globals()['Y%s' % i] = [random.randrange(y_min, y_max, 1) for k in range(8)]
-X1 = [x1_min, x1_min, x1_min, x1_min, x1_max, x1_max, x1_max, x1_max]
-X2 = [x2_min, x2_min, x2_max, x2_max, x2_min, x2_min, x2_max, x2_max]
-X3 = [x3_min, x3_max, x3_min, x3_max, x3_min, x3_max, x3_min, x3_max]
-X12 = sum2(X1, X2)
-X13 = sum2(X1, X3)
-X23 = sum2(X2, X3)
-X123 = sum3(X1, X2, X3)
-X0 = [1] * 8
-s1, s2, s3, s4, s5, s6, s7, s8 = 0, 0, 0, 0, 0, 0, 0, 0
-for i in range(1, m + 1):
-    s1 += globals()['Y%s' % i][0]
-    s2 += globals()['Y%s' % i][1]
-    s3 += globals()['Y%s' % i][2]
-    s4 += globals()['Y%s' % i][3]
-    s5 += globals()['Y%s' % i][4]
-    s6 += globals()['Y%s' % i][5]
-    s7 += globals()['Y%s' % i][6]
-    s8 += globals()['Y%s' % i][7]
 
-y1_av1 = s1 / m
-y2_av2 = s2 / m
-y3_av3 = s3 / m
-y4_av4 = s4 / m
-y5_av5 = s5 / m
-y6_av6 = s6 / m
-y7_av7 = s7 / m
-y8_av8 = s8 / m
-y_av = [round(y1_av1, 3), round(y2_av2, 3), round(y3_av3, 3), round(y4_av4, 3), round(y5_av5, 3), round(y6_av6, 3),
-        round(y7_av7, 3), round(y8_av8, 3)]
-sd1, sd2, sd3, sd4, sd5, sd6, sd7, sd8 = 0, 0, 0, 0, 0, 0, 0, 0
-for i in range(1, m + 1):
-    sd1 += ((globals()['Y%s' % i][0]) - y1_av1) ** 2
-    sd2 += ((globals()['Y%s' % i][1]) - y2_av2) ** 2
-    sd3 += ((globals()['Y%s' % i][2]) - y3_av3) ** 2
-    sd4 += ((globals()['Y%s' % i][3]) - y4_av4) ** 2
-    sd5 += ((globals()['Y%s' % i][4]) - y5_av5) ** 2
-    sd6 += ((globals()['Y%s' % i][5]) - y6_av6) ** 2
-    sd7 += ((globals()['Y%s' % i][6]) - y7_av7) ** 2
-    sd8 += ((globals()['Y%s' % i][7]) - y8_av8) ** 2
-
-d1 = sd1 / m
-d2 = sd2 / m
-d3 = sd3 / m
-d4 = sd4 / m
-d5 = sd5 / m
-d6 = sd6 / m
-d7 = sd7 / m
-d8 = sd8 / m
-disper = [round(d1, 3), round(d2, 3), round(d3, 3), round(d4, 3), round(d5, 3), round(d6, 3), round(d7, 3),
-          round(d8, 3)]
-
-print("Матриця планування:")
-table2 = PrettyTable()
-table2.add_column("№", (1, 2, 3, 4, 5, 6, 7, 8))
-table2.add_column("X1", X1)
-table2.add_column("X2", X2)
-table2.add_column("X3", X3)
-table2.add_column("X12", X12)
-table2.add_column("X13", X13)
-table2.add_column("X23", X23)
-table2.add_column("X123", X123)
-for i in range(1, m + 1):
-    table2.add_column("Y" + str(i), globals()['Y%s' % i])
-table2.add_column("Y", y_av)
-table2.add_column("S^2", disper)
-print(table2, "\n")
-
-b = [i for i in solve(list(zip(X0, X1, X2, X3, X12, X13, X23, X123)), y_av)]
-b0, b1, b2, b3, b4, b5, b6, b7 = round(b[0], 3), round(b[1], 3), round(b[2], 3), round(b[3], 3), round(b[4], 3), round(
-    b[5], 3), round(b[6], 3), round(b[7], 3)
-print("y=" + str(b0) + "+" + str(b1) + "*x1+" + str(b2) + "*x2+" + str(b3) + "*x3+" + str(b4) + "*x1*x2+" + str(
-    b5) + "*x1*x3+" + str(b6) + "*x2*x3+" + str(b7) + "*x1*x2*x3", "\n")
-
-dcouple = [d1, d2, d3, d4, d5, d6, d7, d8]
 
 m = 3
-print("Критерій Кохрена")
 while True:
+
+    for i in range(1, m + 1):
+        globals()['Y%s' % i] = [random.randrange(y_min, y_max, 1) for k in range(8)]
+    X1 = [x1_min, x1_min, x1_min, x1_min, x1_max, x1_max, x1_max, x1_max]
+    X2 = [x2_min, x2_min, x2_max, x2_max, x2_min, x2_min, x2_max, x2_max]
+    X3 = [x3_min, x3_max, x3_min, x3_max, x3_min, x3_max, x3_min, x3_max]
+    X12 = sum2(X1, X2)
+    X13 = sum2(X1, X3)
+    X23 = sum2(X2, X3)
+    X123 = sum3(X1, X2, X3)
+    X0 = [1] * 8
+    s1, s2, s3, s4, s5, s6, s7, s8 = 0, 0, 0, 0, 0, 0, 0, 0
+    for i in range(1, m + 1):
+        s1 += globals()['Y%s' % i][0]
+        s2 += globals()['Y%s' % i][1]
+        s3 += globals()['Y%s' % i][2]
+        s4 += globals()['Y%s' % i][3]
+        s5 += globals()['Y%s' % i][4]
+        s6 += globals()['Y%s' % i][5]
+        s7 += globals()['Y%s' % i][6]
+        s8 += globals()['Y%s' % i][7]
+
+    y1_av1 = s1 / m
+    y2_av2 = s2 / m
+    y3_av3 = s3 / m
+    y4_av4 = s4 / m
+    y5_av5 = s5 / m
+    y6_av6 = s6 / m
+    y7_av7 = s7 / m
+    y8_av8 = s8 / m
+    y_av = [round(y1_av1, 3), round(y2_av2, 3), round(y3_av3, 3), round(y4_av4, 3), round(y5_av5, 3), round(y6_av6, 3),
+            round(y7_av7, 3), round(y8_av8, 3)]
+    sd1, sd2, sd3, sd4, sd5, sd6, sd7, sd8 = 0, 0, 0, 0, 0, 0, 0, 0
+    for i in range(1, m + 1):
+        sd1 += ((globals()['Y%s' % i][0]) - y1_av1) ** 2
+        sd2 += ((globals()['Y%s' % i][1]) - y2_av2) ** 2
+        sd3 += ((globals()['Y%s' % i][2]) - y3_av3) ** 2
+        sd4 += ((globals()['Y%s' % i][3]) - y4_av4) ** 2
+        sd5 += ((globals()['Y%s' % i][4]) - y5_av5) ** 2
+        sd6 += ((globals()['Y%s' % i][5]) - y6_av6) ** 2
+        sd7 += ((globals()['Y%s' % i][6]) - y7_av7) ** 2
+        sd8 += ((globals()['Y%s' % i][7]) - y8_av8) ** 2
+
+    d1 = sd1 / m
+    d2 = sd2 / m
+    d3 = sd3 / m
+    d4 = sd4 / m
+    d5 = sd5 / m
+    d6 = sd6 / m
+    d7 = sd7 / m
+    d8 = sd8 / m
+    disper = [round(d1, 3), round(d2, 3), round(d3, 3), round(d4, 3), round(d5, 3), round(d6, 3), round(d7, 3),
+              round(d8, 3)]
+
+    print("Матриця планування:")
+    table2 = PrettyTable()
+    table2.add_column("№", (1, 2, 3, 4, 5, 6, 7, 8))
+    table2.add_column("X1", X1)
+    table2.add_column("X2", X2)
+    table2.add_column("X3", X3)
+    table2.add_column("X12", X12)
+    table2.add_column("X13", X13)
+    table2.add_column("X23", X23)
+    table2.add_column("X123", X123)
+    for i in range(1, m + 1):
+        table2.add_column("Y" + str(i), globals()['Y%s' % i])
+    table2.add_column("Y", y_av)
+    table2.add_column("S^2", disper)
+    print(table2, "\n")
+
+    b = [i for i in solve(list(zip(X0, X1, X2, X3, X12, X13, X23, X123)), y_av)]
+    b0, b1, b2, b3, b4, b5, b6, b7 = round(b[0], 3), round(b[1], 3), round(b[2], 3), round(b[3], 3), round(b[4],
+                                                                                                           3), round(
+        b[5], 3), round(b[6], 3), round(b[7], 3)
+    print("y=" + str(b0) + "+" + str(b1) + "*x1+" + str(b2) + "*x2+" + str(b3) + "*x3+" + str(b4) + "*x1*x2+" + str(
+        b5) + "*x1*x3+" + str(b6) + "*x2*x3+" + str(b7) + "*x1*x2*x3", "\n")
+
+    dcouple = [d1, d2, d3, d4, d5, d6, d7, d8]
+
+    print("Критерій Кохрена")
+
     Gp = max(dcouple) / sum(dcouple)
     f1 = m - 1
     f2 = N = 8
     fisher = f.isf(*[q / f2, f1, (f2 - 1) * f1])
     Gt = round(fisher / (fisher + (f2 - 1)), 4)
     print("Gp = " + str(Gp) + ", Gt = " + str(Gt))
-    if Gp > Gt:
-        print("Дисперсія неоднорідна (Gp > Gt), збільшуємо m")
-        m += 1
-    else:
+    if Gp < Gt:
         print("Gp < Gt -> Дисперсія однорідна\n")
         print("Критерій Стьюдента")
         sb = sum(dcouple) / N
@@ -244,8 +246,12 @@ while True:
         Ft = round(abs(f.isf(q, f4, f3)), 4)
 
         print("Fp = " + str(round(Fp, 2)) + ", Ft = " + str(Ft))
-        if Fp > Ft:
-            print("Fp > Ft -> Рівняння неадекватне оригіналу")
+        if Fp < Ft:
+            print("Fp > Ft -> Рівняння адекватне оригіналу")
+            break
         else:
-            print("Fp < Ft -> Рівняння адекватне оригіналу")
-        break
+            print("Fp < Ft -> Рівняння неадекватне оригіналу")
+            m = m+1
+    else:
+        print("Дисперсія неоднорідна (Gp > Gt), збільшуємо m")
+        m += 1
